@@ -2,6 +2,7 @@
 *Db.properties
 *Db.script
 .settings
+.project
 eclipse
 stacktrace.log
 target
