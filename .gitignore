@@ -2,9 +2,11 @@
 *Db.properties
 *Db.script
 .settings
+.project
 eclipse
 stacktrace.log
 target
+/bin
 /plugins
 /web-app/plugins
 /web-app/WEB-INF/classes
