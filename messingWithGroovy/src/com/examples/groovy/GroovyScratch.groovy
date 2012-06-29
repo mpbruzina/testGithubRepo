@@ -1,5 +1,4 @@
 package com.examples.groovy
-@Grab(group='org.ccil.cowan.tagsoup', module='tagsoup', version='1.2' )
 class GroovyScratch {
 
 	def doSomething(){
@@ -9,10 +8,37 @@ class GroovyScratch {
 	def fetchSomeHtml(){
 		def tagsoupParser = new org.ccil.cowan.tagsoup.Parser()
 		def slurper = new XmlSlurper(tagsoupParser)
+		// 		this line wouldn't work...
+		//		slurper.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
+		def parsedHtml = slurper.parse("http://www.usacycling.org/results/index.php?compid=282794")
+		//def parsedHtml = slurper.parse("/home/bruzer/projects/testGithubRepo/messingWithGroovy/test/results282794.html")
 
-		slurper.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
-		def htmlParser = slurper.parse("http://www.usacycling.org/results/?compid=282794")
+		println "printing homearticlebody"
+		parsedHtml.'**'.findAll{ it.@class == 'homearticlebody'}.each{ dateAndLocation ->
+			boolean doDifferentStuff 
+			if(dateAndLocation.@colspan == '7'){
+				println "there is a colspan"
+			}
+			else{
+				doDifferentStuff = true
+			}
 
-		htmlParser.'**'.findAll{ it.@class == 'homearticleheader'}.each{ println it }
+			println "----child nodes----"
+			println "how many children? " + dateAndLocation.childNodes().size()
+			
+			if(doDifferentStuff){
+				println "  Rank: " + dateAndLocation?.childNodes()[0]?.text()
+				println "Points: " + dateAndLocation?.childNodes()[1]?.text()
+				println "  Name: " + dateAndLocation?.childNodes()[2]?.text()
+				println " USAC#: " + dateAndLocation?.childNodes()[3]?.text()
+				println "  Time: " + dateAndLocation?.childNodes()[4]?.text()
+				println "  Bib#: " + dateAndLocation?.childNodes()[5]?.text()
+				println "  Team: " + dateAndLocation?.childNodes()[6]?.text()
+			}
+		}
+	}
+
+	def main(String[] args){
+		fetchSomeHtml()
 	}
 }
